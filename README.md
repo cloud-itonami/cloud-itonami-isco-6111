@@ -65,17 +65,17 @@ human-in-the-loop interrupt/resume via checkpointing.
                                            +-> :hold               (:hard? true)
 ```
 
-- `src/field_crop_growing/store.cljc` — `Store` protocol +
+- `src/field_crop_growing/store.cljk` — `Store` protocol +
   `MemStore`: registered field plots, committed records, an
   append-only audit ledger.
-- `src/field_crop_growing/advisor.cljc` — `Advisor` protocol;
+- `src/field_crop_growing/advisor.cljk` — `Advisor` protocol;
   `mock-advisor` (deterministic, default) proposes a plant or harvest
   operation from a request; `llm-advisor` wraps a
   `langchain.model/ChatModel` — either way the advisor only ever
   produces a `:propose`-effect proposal, never a committed record, and
   LLM parse failures always yield `confidence 0.0` (forces escalation,
   never fabricated confidence).
-- `src/field_crop_growing/governor.cljc` —
+- `src/field_crop_growing/governor.cljk` —
   `FieldCropGrowingGovernor/check`: a pure function, wired as its own
   `:govern` node. Hard invariants (unregistered plot, a proposal
   whose `:effect` isn't `:propose`) always route to `:hold`. Escalation
@@ -86,7 +86,7 @@ human-in-the-loop interrupt/resume via checkpointing.
   (`actor/approve!`), matching the README's robotics-premise statement
   that pesticide/herbicide application near water sources, or
   operating near heavy farm machinery, always require human sign-off.
-- `src/field_crop_growing/actor.cljc` — `build-graph`, `run-request!`,
+- `src/field_crop_growing/actor.cljk` — `build-graph`, `run-request!`,
   `approve!`: the `langgraph.graph/state-graph` wiring itself.
 
 ```bash
