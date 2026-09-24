@@ -1,0 +1,32 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a field-monitoring robot performs soil sensing,
+;; planting assist and harvest support for field crop growers (ISCO 6111).
+;; Its physical work here: hauling a harvest bin along a crop row over soft
+;; soil to the headland, and lifting a filled harvest crate onto a trailer bed.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-6111"
+ :cases
+ [{:id :harvest-bin-row-haul
+   :kind :transport
+   :procedure "field robot hauls a harvest bin 100 m along a crop row over tilled soil to the headland"
+   :params {:mass-kg 120.0 :distance-m 100.0 :v-max-mps 1.0 :a-max-mps2 0.3
+            :brake-decel-mps2 0.6 :drive-force-n 400.0 :crr 0.08
+            :cog-height-m 0.55 :support-half-length-m 0.40}
+   :sweep {:param :payload-kg :values [20.0 50.0 100.0 150.0 200.0]}
+   :quantity :cycle-time-s
+   :limit {:max 150.0 :basis "estimate: one row haul within 2.5 minutes keeps pace with a hand-picking crew filling bins"}
+   :boundary {:lo 5.0 :hi 400.0}}
+  {:id :crate-onto-trailer
+   :kind :manipulator
+   :procedure "arm lifts a filled harvest crate from the ground onto a trailer bed at the headland"
+   :params {:l1-m 0.60 :l2-m 0.50 :m1-kg 8.0 :m2-kg 6.0
+            :from [0.70 0.00] :to [0.30 0.90] :duration-s 3.0 :steps 500}
+   :sweep {:param :payload-kg :values [2.0 5.0 10.0 15.0 20.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 150.0 :basis "estimate: continuous shoulder torque of a ~15 kg payload class industrial arm on a field carrier"}
+   :boundary {:lo 0.5 :hi 40.0}}]}
