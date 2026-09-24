@@ -1,5 +1,5 @@
 (ns field-crop-growing.actor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [field-crop-growing.actor :as actor]
             [field-crop-growing.store :as store]))
 
